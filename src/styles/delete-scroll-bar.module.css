@@ -1,0 +1,9 @@
+.delete-scroll-bar {
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* edge */
+}
+
+/* chrome and safari */
+.delete-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
