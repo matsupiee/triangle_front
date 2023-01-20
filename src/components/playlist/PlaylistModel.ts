@@ -1,6 +1,5 @@
 import { useHomepageModel } from "components/homepage/HomepageModel";
-import { useState } from "react";
-import useSound from "use-sound";
+import { useEffect, useState } from "react";
 
 export const usePlaylistModel = () => {
   const { playlistCategories } = useHomepageModel();
@@ -12,7 +11,11 @@ export const usePlaylistModel = () => {
 
   const selectedSong = playlist.songs[selectedSongIndex];
 
-  const [play, { stop }] = useSound(selectedSong.soundSource);
+  const nextIndex =
+    selectedSongIndex === playlist.songs.length - 1 ? 0 : selectedSongIndex + 1;
+
+  const previousIndex =
+    selectedSongIndex === 0 ? playlist.songs.length - 1 : selectedSongIndex - 1;
 
   return {
     name: playlist.name,
@@ -21,9 +24,8 @@ export const usePlaylistModel = () => {
     isPlaying,
     setIsPlaying,
     selectedSong,
-    selectedSongIndex,
+    nextIndex,
+    previousIndex,
     setSelectedSongIndex,
-    play,
-    stop,
   };
 };

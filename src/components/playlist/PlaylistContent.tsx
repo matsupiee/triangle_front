@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { PlayerContent } from "components/player/PlayerContent";
-// import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { usePlaylistModel } from "./PlaylistModel";
 
 export const PlaylistContent = () => {
@@ -18,27 +18,50 @@ export const PlaylistContent = () => {
     isPlaying,
     setIsPlaying,
     selectedSong,
-    selectedSongIndex,
+    nextIndex,
+    previousIndex,
     setSelectedSongIndex,
-    play,
-    stop,
   } = usePlaylistModel();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const handleClickPlayButton = () => {
-    if (isPlaying) {
-      stop();
-      setIsPlaying(false);
-      return;
-    }
-    play();
-    setIsPlaying(true);
+  const play = () => {
+    if (audioRef.current) audioRef.current.play();
   };
+
+  const pause = () => {
+    if (audioRef.current) audioRef.current.pause();
+  };
+
+  const handleTogglePlay = () => {
+    if (isPlaying) {
+      pause();
+      setIsPlaying(false);
+    } else {
+      play();
+      setIsPlaying(true);
+    }
+  };
+
+  const skip = (index: number) => {
+    setIsPlaying(true);
+    setSelectedSongIndex(index);
+  };
+
+  const skipToNext = () => {
+    skip(nextIndex);
+  };
+
+  const skipToPrevious = () => {
+    skip(previousIndex);
+  };
+
+  useEffect(() => {
+    if (isPlaying) play();
+  }, [selectedSong]);
 
   return (
     <Box>
-      {/* <Image src={image} alt={`thumnail of ${name}`} height={134} width={134} /> */}
       <Box h="156px" margin="32px auto" w="156px">
         <Image h="156px" w="156px" src={image} />
       </Box>
@@ -67,8 +90,11 @@ export const PlaylistContent = () => {
         isOpen={isOpen}
         onClose={onClose}
         isPlaying={isPlaying}
-        handleClickPlayButton={handleClickPlayButton}
+        handleClickPlayButton={handleTogglePlay}
+        skipToNextSong={skipToNext}
+        skipToPreviousSong={skipToPrevious}
       />
+      <audio src={selectedSong.soundSource} ref={audioRef} />
     </Box>
   );
 };

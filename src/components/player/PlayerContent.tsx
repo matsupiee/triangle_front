@@ -22,10 +22,20 @@ type Props = {
   onClose: () => void;
   isPlaying: boolean;
   handleClickPlayButton: () => void;
+  skipToNextSong: () => void;
+  skipToPreviousSong: () => void;
 };
 
 export const PlayerContent = (props: Props) => {
-  const { song, isOpen, onClose, isPlaying, handleClickPlayButton } = props;
+  const {
+    song,
+    isOpen,
+    onClose,
+    isPlaying,
+    handleClickPlayButton,
+    skipToNextSong,
+    skipToPreviousSong,
+  } = props;
 
   return (
     <Drawer size="full" isOpen={isOpen} placement="bottom" onClose={onClose}>
@@ -58,6 +68,7 @@ export const PlayerContent = (props: Props) => {
                 bg="transparent"
                 icon={<IoPlaySkipBackSharp size="32px" />}
                 aria-label="skip-back"
+                onClick={skipToPreviousSong}
               />
               <IconButton
                 bg="transparent"
@@ -75,6 +86,7 @@ export const PlayerContent = (props: Props) => {
                 bg="transparent"
                 icon={<IoPlaySkipForwardSharp size="32px" />}
                 aria-label="skip-forward"
+                onClick={skipToNextSong}
               />
             </Flex>
           </Box>
